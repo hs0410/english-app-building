@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>HR English Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100vh;font-family:'Noto Sans KR',sans-serif;overflow-x:hidden}
+
+/* ── ANIMATED BG ── */
+.bg{position:fixed;inset:0;z-index:0;background:linear-gradient(-40deg,#FF6B9D,#FF8FAB,#FFB3C6,#FFDDE7,#F8D7FF,#FFB3C6);background-size:500% 500%;animation:grad 9s ease infinite}
+@keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* ── HEARTS ── */
+.hearts{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.h{position:absolute;bottom:-50px;animation:rise linear infinite;opacity:0}
+@keyframes rise{0%{transform:translateY(0) translateX(0) scale(1);opacity:.8}100%{transform:translateY(-110vh) translateX(var(--dx)) scale(.2);opacity:0}}
+
+/* ── KEYFRAMES ── */
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes popIn{0%{transform:scale(.88);opacity:0}65%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideR{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+
+/* ══════════════════ SPLASH ══════════════════ */
+#splash{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px 36px;transition:opacity .5s ease,transform .5s ease}
+#splash.out{opacity:0;transform:translateY(-18px);pointer-events:none;position:fixed;inset:0}
+
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:14px;animation:up .65s ease both}
+
+.hero{text-align:center;margin-bottom:24px;animation:up .72s .08s ease both}
+.sp-title{font-size:clamp(38px,8vw,66px);font-weight:900;line-height:1.05;color:#fff;letter-spacing:-.03em;text-shadow:0 4px 32px rgba(200,30,80,.22);margin-bottom:10px}
+.sp-title em{font-style:normal;color:rgba(255,255,255,.5)}
+.sp-sub{font-size:clamp(13px,2vw,15px);color:rgba(255,255,255,.8);font-weight:600;letter-spacing:.02em;margin-bottom:8px}
+.sp-desc{font-size:clamp(12px,1.8vw,13px);color:rgba(255,255,255,.6);font-weight:400;line-height:1.7}
+
+.sp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;max-width:760px;margin-bottom:28px}
+.sp-card{background:rgba(255,255,255,.84);backdrop-filter:blur(18px);border:1.5px solid rgba(255,255,255,.95);border-radius:18px;padding:20px 16px 18px;cursor:pointer;transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s;animation:up .7s ease both;text-align:center}
+.sp-card:nth-child(1){animation-delay:.13s}.sp-card:nth-child(2){animation-delay:.21s}.sp-card:nth-child(3){animation-delay:.29s}.sp-card:nth-child(4){animation-delay:.37s}
+.sp-card:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 18px 44px rgba(200,30,80,.18)}
+.sp-card:hover .sp-ico{transform:scale(1.14) rotate(-5deg)}
+.sp-ico{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 12px;box-shadow:0 4px 14px rgba(0,0,0,.1),inset 0 1px 0 rgba(255,255,255,.8);transition:transform .2s}
+.sp-num{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.sp-name{font-size:14px;font-weight:800;color:#1E1B4B;line-height:1.25}
+
+.sp-cta{display:inline-flex;align-items:center;gap:9px;background:#fff;color:#F43F6E;border:none;border-radius:50px;padding:15px 44px;font-size:16px;font-weight:800;font-family:'Noto Sans KR',sans-serif;cursor:pointer;letter-spacing:-.01em;box-shadow:0 10px 36px rgba(0,0,0,.12);transition:all .22s cubic-bezier(.34,1.56,.64,1);animation:up .78s .44s ease both}
+.sp-cta:hover{transform:translateY(-4px) scale(1.05);box-shadow:0 18px 46px rgba(0,0,0,.17)}
+.sp-arr{font-size:18px;transition:transform .2s}
+.sp-cta:hover .sp-arr{transform:translateX(4px)}
+
+/* ══════════════════ APP SHELL ══════════════════ */
+#app{display:none;position:relative;z-index:2;min-height:100vh;flex-direction:column}
+#app.show{display:flex;animation:up .4s ease both}
+
+/* header */
+.hdr{background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border-bottom:1.5px solid rgba(255,200,210,.4);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100}
+.logo-txt{font-size:18px;font-weight:900;color:#F43F6E;letter-spacing:-.02em}
+.logo-tag{font-size:10px;font-weight:600;color:#94A3B8;letter-spacing:.04em;margin-top:1px}
+.count-pill{background:linear-gradient(135deg,#F43F6E,#A78BFA);color:#fff;font-size:12px;font-weight:700;padding:5px 13px;border-radius:20px;display:flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(244,63,110,.28)}
+
+/* tabs */
+.tabs{display:flex;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);border-bottom:1.5px solid rgba(255,200,210,.35);padding:0 16px;overflow-x:auto;scrollbar-width:none;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:13px 15px;background:none;border:none;border-bottom:2.5px solid transparent;color:#64748B;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:600;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:#F43F6E}
+.tab-btn.on{color:#F43F6E;border-bottom-color:#F43F6E}
+.tab-ico{font-size:16px;transition:transform .2s;display:inline-block}
+.tab-btn.on .tab-ico,.tab-btn:hover .tab-ico{transform:translateY(-2px) scale(1.1)}
+
+/* page content */
+.page{padding:24px;max-width:1040px;margin:0 auto;width:100%;animation:up .3s ease both}
+
+/* page hero */
+.pg-hero{background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,240,250,.8));backdrop-filter:blur(12px);border:1.5px solid rgba(255,200,210,.45);border-radius:20px;padding:26px 28px;margin-bottom:22px;position:relative;overflow:hidden}
+.pg-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(244,63,110,.08),transparent 70%)}
+.pg-title{font-size:24px;font-weight:900;color:#1E1B4B;line-height:1.2;margin-bottom:5px}
+.pg-accent{color:#F43F6E}
+.pg-sub{color:#64748B;font-size:13px;line-height:1.65;margin-bottom:16px}
+.float-row{display:flex;gap:10px;margin-bottom:12px}
+.fi{font-size:30px;animation:floatY 3s ease-in-out infinite}
+.fi:nth-child(2){animation-delay:.35s}.fi:nth-child(3){animation-delay:.7s}
+
+/* cards */
+.card{background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border:1.5px solid rgba(255,200,210,.3);border-radius:16px;padding:20px;transition:all .2s;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.card2{background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1.5px solid rgba(255,200,210,.25);border-radius:12px;padding:13px 15px}
+
+/* 3d icon */
+.i3d{border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.1),inset 0 1px 0 rgba(255,255,255,.8);transition:transform .18s}
+.i3d.pk{background:linear-gradient(145deg,#FFD6E0,#FFB3C4)}
+.i3d.lv{background:linear-gradient(145deg,#EDE9FE,#DDD6FE)}
+.i3d.mn{background:linear-gradient(145deg,#D1FAE5,#A7F3D0)}
+.i3d.sk{background:linear-gradient(145deg,#DBEAFE,#BFDBFE)}
+.i3d.pc{background:linear-gradient(145deg,#FFEDD5,#FED7AA)}
+
+/* buttons */
+.btn{padding:10px 18px;border-radius:10px;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;border:none;display:inline-flex;align-items:center;gap:5px}
+.btn-rose{background:linear-gradient(135deg,#F43F6E,#E11D48);color:#fff;box-shadow:0 4px 12px rgba(244,63,110,.3)}
+.btn-rose:hover{transform:translateY(-2px);box-shadow:0 7px 18px rgba(244,63,110,.38)}
+.btn-lav{background:linear-gradient(135deg,#A78BFA,#8B5CF6);color:#fff;box-shadow:0 4px 12px rgba(139,92,246,.25)}
+.btn-lav:hover{transform:translateY(-2px)}
+.btn-ghost{background:rgba(255,255,255,.8);border:1.5px solid rgba(200,160,200,.35);color:#64748B}
+.btn-ghost:hover{border-color:#F43F6E;color:#F43F6E;background:rgba(255,228,235,.5)}
+.btn-sm{padding:7px 12px;font-size:12px;border-radius:8px}
+.btn-save{background:rgba(255,228,235,.7);border:1.5px solid #FCA5BC;color:#F43F6E;font-size:12px;font-weight:700;padding:6px 12px;border-radius:9px;cursor:pointer;transition:all .18s;font-family:'Noto Sans KR',sans-serif;display:inline-flex;align-items:center;gap:4px}
+.btn-save:hover{background:#F43F6E;color:#fff;transform:scale(1.04)}
+.btn-save.saved{background:rgba(209,250,229,.7);border-color:#6EE7B7;color:#047857}
+.btn:disabled{opacity:.44;cursor:not-allowed;transform:none!important}
+
+/* forms */
+.fl{display:flex;flex-direction:column;gap:5px}
+.flb{font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.07em}
+.finp,.fsel,.ftxt{background:rgba(255,255,255,.8);border:1.5px solid rgba(200,160,200,.4);border-radius:10px;padding:10px 13px;color:#1E1B4B;font-family:'Noto Sans KR',sans-serif;font-size:14px;width:100%;transition:all .18s;outline:none}
+.finp:focus,.fsel:focus,.ftxt:focus{border-color:#F43F6E;background:#fff;box-shadow:0 0 0 3px rgba(244,63,110,.1)}
+.finp::placeholder,.ftxt::placeholder{color:#94A3B8}
+.ftxt{resize:vertical;min-height:130px;line-height:1.75}
+
+/* badges */
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:7px;font-size:11px;font-weight:700;gap:3px}
+.bdg-email{background:#FFE4EB;color:#BE185D}.bdg-meeting{background:#EDE9FE;color:#6D28D9}
+.bdg-article{background:#D1FAE5;color:#047857}.bdg-other{background:#F3F4F6;color:#4B5563}
+
+/* today cards */
+.today-card{border-radius:18px;padding:22px 24px;position:relative;overflow:hidden;border:1.5px solid}
+.today-card.wod{background:rgba(255,255,255,.78);backdrop-filter:blur(12px);border-color:rgba(255,182,193,.5)}
+.today-card.pod{background:rgba(255,255,255,.78);backdrop-filter:blur(12px);border-color:rgba(196,181,253,.4)}
+.today-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.today-word{font-size:26px;font-weight:900;color:#1E1B4B;line-height:1.1;margin-bottom:4px}
+.today-pron{font-size:13px;color:#64748B;margin-bottom:8px}
+.today-phrase{font-size:18px;font-weight:800;color:#1E1B4B;margin-bottom:7px;line-height:1.3}
+.today-ko{font-size:13px;color:#64748B;margin-bottom:9px}
+.today-def{font-size:13px;color:#1E1B4B;line-height:1.7;margin-bottom:9px;font-weight:500}
+.today-ex{font-size:12px;color:#64748B;line-height:1.75;font-style:italic;padding:9px 13px;background:rgba(255,255,255,.7);border-radius:9px}
+.today-ex.wod{border-left:3px solid #FCA5BC}.today-ex.pod{border-left:3px solid #A78BFA}
+.cat-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;display:inline-block;margin-bottom:8px}
+
+/* vocab */
+.vocab-chip{background:rgba(255,255,255,.78);backdrop-filter:blur(8px);border:1.5px solid rgba(255,200,210,.3);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .18s}
+.vocab-chip:hover{border-color:#FCA5BC;transform:translateY(-2px);box-shadow:0 5px 14px rgba(244,63,110,.09)}
+.vc-word{font-weight:700;font-size:13px;color:#1E1B4B;margin-bottom:2px}
+.vc-ko{font-size:11px;color:#64748B}
+
+/* expr */
+.expr{display:flex;align-items:flex-start;gap:11px;padding:13px 15px;background:rgba(255,255,255,.8);backdrop-filter:blur(8px);border:1.5px solid rgba(255,200,210,.3);border-radius:13px;cursor:pointer;transition:all .18s;animation:slideR .26s ease}
+.expr:hover{border-color:#FCA5BC;box-shadow:0 3px 12px rgba(244,63,110,.08)}
+.expr.sel{border-color:#F43F6E;background:rgba(255,228,235,.5)}
+.expr-txt{font-weight:700;color:#1E1B4B;font-size:13px}
+.expr-ko{font-size:12px;color:#64748B;margin-top:2px}
+.expr-ctx{font-size:11px;color:#94A3B8;margin-top:2px;font-style:italic}
+
+/* flip cards */
+.flip-wrap{perspective:1200px;height:230px;cursor:pointer}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.flip-inner.f{transform:rotateY(180deg)}
+.flip-f,.flip-b{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:16px;overflow:hidden}
+.flip-f{background:rgba(255,255,255,.82);backdrop-filter:blur(12px);border:1.5px solid rgba(255,200,210,.4);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px}
+.flip-b{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border:1.5px solid rgba(255,200,210,.3);transform:rotateY(180deg);padding:16px;overflow-y:auto}
+.flip-word{font-size:17px;font-weight:800;color:#F43F6E;margin-bottom:7px;line-height:1.35}
+
+/* scenario */
+.scen{background:rgba(219,234,254,.7);backdrop-filter:blur(8px);border:1.5px solid #BFDBFE;border-radius:13px;padding:15px 17px;margin-bottom:13px}
+.scen-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#3730A3;margin-bottom:6px}
+
+/* feedback */
+.fb{background:rgba(240,253,244,.85);backdrop-filter:blur(8px);border:1.5px solid #A7F3D0;border-radius:13px;padding:18px;margin-top:14px;animation:popIn .35s ease}
+.fb-ttl{font-size:13px;font-weight:700;color:#047857;margin-bottom:9px}
+.fb-body{font-size:13px;color:#374151;line-height:1.85;white-space:pre-wrap}
+
+/* template cards */
+.tmpl-card{background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border:1.5px solid rgba(255,200,210,.3);border-radius:16px;padding:18px;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.tmpl-card:hover{transform:translateY(-3px);border-color:#FCA5BC;box-shadow:0 10px 28px rgba(244,63,110,.1)}
+.tmpl-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:11px}
+.tmpl-cat{font-size:11px;font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.tmpl-name{font-weight:700;font-size:13px;color:#1E1B4B}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(60,20,70,.35);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);animation:fadeIn .18s ease}
+.modal{background:#fff;border:1.5px solid #E2D0EE;border-radius:20px;padding:26px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;animation:popIn .3s ease;box-shadow:0 20px 56px rgba(0,0,0,.15)}
+.modal-subj{background:linear-gradient(135deg,#FFE4EB,#EDE9FE);border:1.5px solid #FCA5BC;border-radius:9px;padding:9px 13px;font-size:13px;color:#BE185D;margin-bottom:14px;font-weight:600}
+.tmpl-body{font-size:13px;line-height:2.1;color:#64748B;white-space:pre-wrap}
+.kp{background:linear-gradient(135deg,#FFE4EB,#EDE9FE);color:#BE185D;border-radius:4px;padding:1px 5px;font-weight:600;border:1px solid #FFB3C4}
+
+/* misc */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.divider{border:none;border-top:1.5px solid rgba(255,200,210,.3);margin:11px 0}
+.spinner{width:15px;height:15px;border:2px solid #FFB3C4;border-top-color:#F43F6E;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;vertical-align:middle}
+.empty{text-align:center;padding:52px 20px;color:#94A3B8}
+.empty-ico{font-size:44px;display:block;margin-bottom:11px;animation:floatY 3s ease-in-out infinite}
+.toast{position:fixed;bottom:22px;right:22px;background:#fff;border:1.5px solid #FCA5BC;border-radius:12px;padding:11px 17px;font-size:13px;font-weight:700;color:#F43F6E;z-index:999;box-shadow:0 7px 20px rgba(244,63,110,.18);animation:popIn .26s ease}
+.sel-bar{display:flex;align-items:center;gap:9px;padding:10px 14px;background:rgba(255,228,235,.6);border-radius:11px;border:1.5px solid #FCA5BC;margin-bottom:13px}
+.mode-btn{padding:8px 16px;border-radius:9px;border:1.5px solid rgba(200,160,200,.35);background:rgba(255,255,255,.7);color:#64748B;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:5px}
+.mode-btn.on{background:linear-gradient(135deg,#F43F6E,#A78BFA);color:#fff;border-color:transparent}
+.mode-btn:not(.on):hover{border-color:#F43F6E;color:#F43F6E}
+.tag-pill{display:inline-flex;align-items:center;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .18s}
+.tag-pill.on{background:linear-gradient(135deg,#F43F6E,#E11D48);color:#fff;box-shadow:0 3px 10px rgba(244,63,110,.28)}
+.tag-pill.off{color:#64748B;border-color:rgba(200,160,200,.35);background:rgba(255,255,255,.7)}
+.tag-pill.off:hover{border-color:#F43F6E;color:#F43F6E}
+.cat-btn{padding:6px 14px;border-radius:20px;border:1.5px solid rgba(200,160,200,.35);background:rgba(255,255,255,.7);color:#64748B;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s}
+.cat-btn.on{background:linear-gradient(135deg,#A78BFA,#8B5CF6);color:#fff;border-color:transparent}
+.cat-btn:not(.on):hover{border-color:#A78BFA;color:#A78BFA}
+.sec-ttl{font-size:15px;font-weight:700;color:#1E1B4B;margin-bottom:13px;display:flex;align-items:center;gap:7px}
+.chip{background:rgba(255,255,255,.8);color:#F43F6E;font-size:12px;font-weight:600;padding:4px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #FCA5BC;transition:all .14s;font-family:'Noto Sans KR',sans-serif}
+.chip:hover{background:#F43F6E;color:#fff}
+
+@media(max-width:700px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.sp-grid{grid-template-columns:repeat(2,1fr)}.page{padding:16px}.sp-title{font-size:36px}}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#FCA5BC;border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="hearts" id="hl"></div>
+
+<!-- ══════════ SPLASH ══════════ -->
+<div id="splash">
+  <div class="eyebrow">Global HR · Business English</div>
+  <div class="hero">
+    <div class="sp-title">HR English<br/><em>Coach</em></div>
+    <div class="sp-sub">인사담당자를 위한 비즈니스 영어</div>
+    <div class="sp-desc">글로벌 인사담당자·주재원 관리를 위한 비즈니스 영어 학습<br/>매일 새로운 표현으로 글로벌 HR 역량을 키워보세요 💗</div>
+  </div>
+  <div class="sp-grid">
+    <div class="sp-card" onclick="startApp('home')">
+      <div class="sp-ico" style="background:linear-gradient(145deg,#FFD6E0,#FFB3C4)">📅</div>
+      <div class="sp-num" style="color:#F43F6E">01 · Daily</div>
+      <div class="sp-name">오늘의 영어 표현</div>
+    </div>
+    <div class="sp-card" onclick="startApp('write')">
+      <div class="sp-ico" style="background:linear-gradient(145deg,#EDE9FE,#DDD6FE)">✍️</div>
+      <div class="sp-num" style="color:#A78BFA">02 · Practice</div>
+      <div class="sp-name">작문 연습</div>
+    </div>
+    <div class="sp-card" onclick="startApp('tmpl')">
+      <div class="sp-ico" style="background:linear-gradient(145deg,#D1FAE5,#A7F3D0)">📋</div>
+      <div class="sp-num" style="color:#34D399">03 · Templates</div>
+      <div class="sp-name">HR 이메일 템플릿</div>
+    </div>
+    <div class="sp-card" onclick="startApp('bank')">
+      <div class="sp-ico" style="background:linear-gradient(145deg,#FFEDD5,#FED7AA)">📚</div>
+      <div class="sp-num" style="color:#FB923C">04 · My Words</div>
+      <div class="sp-name">나만의 영단어</div>
+    </div>
+  </div>
+  <button class="sp-cta" onclick="startApp('home')">시작하기 <span class="sp-arr">→</span></button>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app">
+  <!-- header -->
+  <header class="hdr">
+    <div>
+      <div class="logo-txt">HR English Coach</div>
+      <div class="logo-tag">인사담당자를 위한 비즈니스 영어</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;color:#64748B;font-weight:500">저장된 표현</span>
+      <span class="count-pill" id="exprCount">📚 0개</span>
+    </div>
+  </header>
+
+  <!-- tabs -->
+  <nav class="tabs">
+    <button class="tab-btn on" data-tab="home"  onclick="switchTab('home')"><span class="tab-ico">🏠</span>오늘의 학습</button>
+    <button class="tab-btn"    data-tab="write" onclick="switchTab('write')"><span class="tab-ico">✍️</span>작문 연습</button>
+    <button class="tab-btn"    data-tab="tmpl"  onclick="switchTab('tmpl')"><span class="tab-ico">📋</span>HR 템플릿</button>
+    <button class="tab-btn"    data-tab="cards" onclick="switchTab('cards')"><span class="tab-ico">🃏</span>AI 카드화</button>
+    <button class="tab-btn"    data-tab="bank"  onclick="switchTab('bank')"><span class="tab-ico">📚</span>표현 저장소</button>
+  </nav>
+
+  <!-- tab pages -->
+  <div id="page-home"  class="page"></div>
+  <div id="page-write" class="page" style="display:none"></div>
+  <div id="page-tmpl"  class="page" style="display:none"></div>
+  <div id="page-cards" class="page" style="display:none"></div>
+  <div id="page-bank"  class="page" style="display:none"></div>
+</div>
+
+<div id="toastEl" class="toast" style="display:none"></div>
+
+<script>
+/* ══════════════════════════════════════
+   DATA
+══════════════════════════════════════ */
+const DAILY_WORDS=[
+  {word:"Onboarding",pron:"/ˈɒnˌbɔːrdɪŋ/",cat:"채용·온보딩",def:"신규 입사자가 조직에 적응하도록 지원하는 전 과정.",ex:"The onboarding program covers compliance training, system access, and a 30-day buddy assignment."},
+  {word:"Headcount",pron:"/ˈhɛdkaʊnt/",cat:"인력 계획",def:"조직 내 전체 직원 수 또는 부서에 배정된 인원 수.",ex:"We need to review headcount before approving any new requisitions for Q3."},
+  {word:"Attrition",pron:"/əˈtrɪʃən/",cat:"이직·유지",def:"자발적·비자발적 퇴직으로 인한 인력 감소율.",ex:"Our voluntary attrition rate increased to 12% last quarter."},
+  {word:"Calibration",pron:"/ˌkælɪˈbreɪʃən/",cat:"성과 관리",def:"부서 간 평가 기준을 통일하고 성과 등급을 조정하는 회의.",ex:"Calibration sessions ensure ratings are applied consistently across all teams."},
+  {word:"Expatriate",pron:"/ɛkˈspætrɪɪt/",cat:"주재원",def:"본국을 떠나 해외 법인에서 근무하는 직원.",ex:"The expatriate package includes housing allowance, COLA, and annual home leave."},
+  {word:"Engagement",pron:"/ɪnˈɡeɪdʒmənt/",cat:"조직문화",def:"직원이 업무와 조직에 심리적으로 몰입하는 정도.",ex:"Our engagement score improved 8 points after the new flexible work policy."},
+  {word:"Succession",pron:"/səkˈsɛʃən/",cat:"인재 개발",def:"핵심 직위에 대한 후계자를 사전 발굴·육성하는 계획.",ex:"The succession plan for the CFO role identifies three internal candidates."},
+  {word:"Severance",pron:"/ˈsɛvərəns/",cat:"퇴직",def:"해고 또는 계약 종료 시 지급하는 퇴직 위로금.",ex:"The severance package includes two weeks' pay per year of service."},
+  {word:"Competency",pron:"/ˈkɒmpɪtənsi/",cat:"성과 관리",def:"특정 직무를 효과적으로 수행하는 데 필요한 지식·기술·행동.",ex:"Each role has a competency framework aligned to our four leadership principles."},
+  {word:"Grievance",pron:"/ˈɡriːvəns/",cat:"노사 관계",def:"직원이 공식적으로 제기하는 불만 또는 고충.",ex:"The HR team received a grievance regarding the overtime policy."},
+  {word:"Benchmarking",pron:"/ˈbɛntʃmɑːrkɪŋ/",cat:"보상",def:"경쟁사 또는 업계 평균과 자사의 급여·제도를 비교하는 행위.",ex:"We benchmarked salaries against 15 peer companies to ensure competitiveness."},
+  {word:"Repatriation",pron:"/ˌriːˌpætrɪˈeɪʃən/",cat:"주재원",def:"해외 파견을 마친 직원이 본국으로 귀환하는 과정.",ex:"We initiated repatriation planning six months before the end of her assignment."},
+  {word:"Requisition",pron:"/ˌrɛkwɪˈzɪʃən/",cat:"채용",def:"공식적인 채용 요청서. 신규 또는 대체 인력 채용을 위한 승인 프로세스.",ex:"The manager submitted a requisition for two senior analyst roles in Seoul."},
+  {word:"Compliance",pron:"/kəmˈplaɪəns/",cat:"인사 법무",def:"노동법, 사내 정책 등 관련 규정을 준수하는 것.",ex:"All employees must complete annual compliance training by end of Q1."},
+  {word:"Probationary",pron:"/prəˈbeɪʃənəri/",cat:"채용·온보딩",def:"입사 후 일정 기간 업무 적합성을 평가하는 수습 기간에 관한.",ex:"The probationary period is 90 days, with a formal review at the end."},
+];
+const DAILY_PHRASES=[
+  {phrase:"contingent upon",ko:"~을 조건으로",usage:"This offer is contingent upon satisfactory completion of a background check."},
+  {phrase:"at your earliest convenience",ko:"편하신 가장 이른 시일 내에",usage:"Please confirm your attendance at your earliest convenience."},
+  {phrase:"moving forward with",ko:"~을 진행하기로 결정하여",usage:"After careful consideration, we are moving forward with another candidate."},
+  {phrase:"in line with",ko:"~에 따라, ~에 부합하게",usage:"Your compensation will be reviewed in line with our annual benchmarking process."},
+  {phrase:"loop someone in",ko:"관련자를 참여·공유시키다",usage:"Please loop in the legal team before we finalize the separation terms."},
+  {phrase:"take this offline",ko:"별도로 이야기하다",usage:"Let's take this offline and schedule a follow-up with the three of us."},
+  {phrase:"flag a concern",ko:"우려 사항을 알리다",usage:"I wanted to flag a concern regarding the timeline before we finalize."},
+  {phrase:"circle back",ko:"다시 연락하다",usage:"I'll circle back once I've reviewed the offer details with the compensation team."},
+  {phrase:"hard stop at",ko:"~시에 꼭 자리를 떠야 해서",usage:"I have a hard stop at 3 PM, so let's prioritize the key decisions first."},
+  {phrase:"on the same page",ko:"같은 이해와 목표를 공유하다",usage:"Let's make sure we're all on the same page regarding the criteria for this hire."},
+  {phrase:"people-first approach",ko:"사람 중심 접근 방식",usage:"Our HR strategy is built on a people-first approach that prioritizes well-being."},
+  {phrase:"bandwidth",ko:"(업무) 여력, 가용 시간",usage:"I want to flag that my bandwidth is limited until the end of this month."},
+];
+const HR_VOCAB=[
+  {word:"Job Requisition",ko:"채용 요청서",cat:"채용"},{word:"Talent Pipeline",ko:"인재 후보군",cat:"채용"},
+  {word:"Notice Period",ko:"퇴직 예고 기간",cat:"채용"},{word:"Counter-offer",ko:"맞제안",cat:"채용"},
+  {word:"Induction",ko:"신입 교육",cat:"온보딩"},{word:"30-60-90 Plan",ko:"30-60-90일 계획",cat:"온보딩"},
+  {word:"OKR",ko:"목표·핵심 결과",cat:"성과"},{word:"PIP",ko:"성과 개선 계획",cat:"성과"},
+  {word:"High Potential",ko:"고잠재력 인재",cat:"성과"},{word:"Stack Ranking",ko:"상대 평가 순위",cat:"성과"},
+  {word:"COLA",ko:"생계비 조정 수당",cat:"주재원"},{word:"Home Leave",ko:"귀국 휴가",cat:"주재원"},
+  {word:"Tax Equalization",ko:"세금 보전 제도",cat:"주재원"},{word:"Shadow Payroll",ko:"섀도우 페이롤",cat:"주재원"},
+  {word:"Salary Band",ko:"급여 구간",cat:"보상"},{word:"Total Reward",ko:"통합 보상",cat:"보상"},
+  {word:"Vesting Schedule",ko:"권리 취득 일정",cat:"보상"},{word:"EAP",ko:"근로자 지원 프로그램",cat:"복리후생"},
+  {word:"Flex Benefits",ko:"선택적 복리후생",cat:"복리후생"},{word:"Parental Leave",ko:"육아 휴직",cat:"복리후생"},
+  {word:"Works Council",ko:"노사 협의회",cat:"노사"},{word:"Whistleblowing",ko:"내부 고발 제도",cat:"노사"},
+];
+const VCATS=["전체","채용","온보딩","성과","주재원","보상","복리후생","노사"];
+const TMPL_CATS=["전체","채용","온보딩","성과관리","주재원","퇴직"];
+const HR_TEMPLATES=[
+  {id:"offer",category:"채용",icon:"📋",bg:"linear-gradient(145deg,#FFD6E0,#FFB3C4)",catColor:"#BE185D",title:"Job Offer Letter",subject:"Job Offer – [Position Title] at [Company Name]",body:`Dear [Candidate Name],\n\nWe are pleased to extend this formal offer of employment for the position of [Job Title] at [Company Name].\n\n**Please find the key terms below:**\n\nPosition: [Job Title]  |  Department: [Department]\nReporting to: [Manager Name]  |  Start Date: [Date]\nBase Salary: KRW [Amount] per annum\n\n**This offer is contingent upon successful completion of reference checks and background verification.** Please confirm your acceptance no later than [Date].\n\n**Should you have any questions, please do not hesitate to contact me directly.**\n\nWarm regards,\n[Your Name] | Human Resources | [Company]`},
+  {id:"interview",category:"채용",icon:"🗓️",bg:"linear-gradient(145deg,#EDE9FE,#DDD6FE)",catColor:"#6D28D9",title:"Interview Invitation",subject:"Interview Invitation – [Position] | [Company]",body:`Dear [Candidate Name],\n\n**We were impressed by your background and would like to invite you to the next stage of our selection process.**\n\nDate & Time: [Date] at [Time] [Timezone]\nFormat: [Virtual / In-person]  |  Duration: ~60 min\nLocation / Platform: [Details]\n\nPanel members:\n• [Interviewer 1], [Title]\n• [Interviewer 2], [Title]\n\n**Please confirm your availability at your earliest convenience.**\n\nBest regards,\n[Your Name] | Talent Acquisition | [Company]`},
+  {id:"rejection",category:"채용",icon:"📩",bg:"linear-gradient(145deg,#FEF3C7,#FDE68A)",catColor:"#92400E",title:"Post-Interview Rejection",subject:"Update on Your Application – [Company]",body:`Dear [Candidate Name],\n\n**We sincerely appreciate the time and effort you invested throughout our interview process.**\n\nAfter careful deliberation, we have decided to move forward with another candidate whose profile more closely aligns with our current requirements. **This is in no way a reflection of your overall qualifications.**\n\n**We would like to keep your details on file and will reach out should a suitable opportunity arise in the future.**\n\nWe wish you every success.\n\nKind regards,\n[Your Name] | Human Resources | [Company]`},
+  {id:"welcome",category:"온보딩",icon:"👋",bg:"linear-gradient(145deg,#D1FAE5,#A7F3D0)",catColor:"#047857",title:"Welcome Onboard",subject:"Welcome to [Company], [Name]!",body:`Dear [Employee Name],\n\n**On behalf of the entire team, we are truly delighted to welcome you.**\n\nStart Date: [Date]  |  Reporting Time: [Time]\nLocation / Virtual Link: [Details]\nBuddy: [Name] — [Contact]\n\n**We have prepared a structured onboarding plan for your first four weeks.**\n\nBefore Day 1, please:\n• Return the signed employment contract\n• Complete the IT setup form (link attached)\n• Review the Employee Handbook (attached)\n\n**We look forward to supporting you every step of the way.**\n\nWarm regards,\n[Your Name] | People & Culture | [Company]`},
+  {id:"perf",category:"성과관리",icon:"📊",bg:"linear-gradient(145deg,#DBEAFE,#BFDBFE)",catColor:"#1D4ED8",title:"Annual Review Invitation",subject:"Annual Performance Review – [Name]",body:`Dear [Employee Name],\n\n**I would like to schedule your Annual Performance Review to reflect on last year and co-create your goals ahead.**\n\nDate: [Date]  |  Time: [Time]  |  Duration: 60 min\nLink: [Details]\n\nAgenda:\n1. Progress against [Year] objectives\n2. Key achievements and development areas\n3. Competency assessment\n4. Compensation outcome\n5. Goals for [Next Year]\n\n**I encourage you to complete your self-assessment beforehand.**\n\nBest regards,\n[Your Name] | HR Business Partner | [Company]`},
+  {id:"pip",category:"성과관리",icon:"📌",bg:"linear-gradient(145deg,#FEE2E2,#FECACA)",catColor:"#991B1B",title:"PIP Initiation Notice",subject:"Performance Improvement Plan – Confidential",body:`Dear [Employee Name],\n\n**I am writing to formally initiate a Performance Improvement Plan (PIP) to provide structured support for your success.**\n\nAreas for improvement:\n• [Area 1]  •  [Area 2]  •  [Area 3]\n\n**This plan is designed to support your growth — not to penalize you.** Over the next [30/60/90] days, we will work toward clearly defined targets with regular check-ins.\n\n**We are fully committed to your success.**\n\nRegards,\n[Your Name] | HR Business Partner | [Company]`},
+  {id:"expat",category:"주재원",icon:"✈️",bg:"linear-gradient(145deg,#EDE9FE,#E0E7FF)",catColor:"#5B21B6",title:"International Assignment Offer",subject:"International Assignment Offer – Confidential",body:`Dear [Employee Name],\n\n**I am pleased to confirm your selection for an international assignment to [Location], effective [Start Date].**\n\nHost Country: [Country]  |  Duration: [24 months]  |  Position: [Job Title]\n\n**Your package will include** housing allowance, COLA, home leave, and international health coverage per our Global Mobility Policy.\n\n**Pre-departure support includes** cultural orientation, tax advisory, and full relocation coordination.\n\nPlease confirm acceptance by [Date].\n\nWarm regards,\n[Your Name] | Global Mobility | [Company]`},
+  {id:"repat",category:"주재원",icon:"🏠",bg:"linear-gradient(145deg,#D1FAE5,#ECFDF5)",catColor:"#065F46",title:"Repatriation Notice",subject:"Repatriation Planning – [Name]",body:`Dear [Employee Name],\n\n**As your assignment in [Location] concludes on [Date], I am reaching out to begin repatriation planning.**\n\nReturn to: [City, Country]  |  Target Date: [Date]\n\n**Entitlements include** household goods shipment, business class flights for eligible dependents, and temporary housing support.\n\n**We are actively identifying a re-entry role** that leverages your international experience.\n\nPlease complete the Repatriation Checklist by [Date].\n\nBest regards,\n[Your Name] | Global Mobility | [Company]`},
+  {id:"resign",category:"퇴직",icon:"🤝",bg:"linear-gradient(145deg,#F3F4F6,#E5E7EB)",catColor:"#374151",title:"Resignation Acknowledgment",subject:"Acknowledgment of Resignation – [Name]",body:`Dear [Employee Name],\n\n**I am writing to acknowledge your resignation dated [Date], with your last day confirmed as [Date].**\n\n**On behalf of [Company], I sincerely thank you for your [X years] of dedicated service.**\n\nPlease work with [Manager] to complete a thorough handover by your last day.\n\n**We warmly welcome an exit interview** to gather your candid feedback.\n\n**We wish you every success in your next chapter.**\n\nKind regards,\n[Your Name] | Human Resources | [Company]`},
+];
+const SCENARIOS={
+  email:[
+    {id:"e1",title:"면접 일정 재조율",ko:"싱가포르 시니어 후보자가 금요일 오후 인터뷰를 요청했으나 패널 한 명이 불가합니다. 대안 일정 2개를 정중히 제안하는 이메일을 작성하세요.",en:"A senior candidate requested Friday PM but one panelist is unavailable. Propose two alternative slots."},
+    {id:"e2",title:"주재원 연장 확인",ko:"독일 주재원이 6개월 연장을 구두 요청했습니다. 인사팀 승인을 확인하고 다음 절차를 안내하는 이메일을 작성하세요.",en:"An expat verbally requested a 6-month extension. Confirm HR approval and outline next steps."},
+    {id:"e3",title:"PIP 착수 통보",ko:"3개월 연속 목표 달성률 60% 미만인 팀원에게 PIP 착수를 지지적·건설적 톤으로 알리는 이메일을 작성하세요.",en:"Notify an underperformer (below 60% for 3 months) that a PIP is starting. Keep a supportive tone."},
+    {id:"e4",title:"복리후생 변경 공지",ko:"1월부터 의료보험 플랜이 변경됩니다. 주요 변경 사항·선택 방법·신청 기한을 전 직원에게 공지하는 이메일을 작성하세요.",en:"Announce healthcare plan changes from January — key changes, enrollment, deadline."},
+    {id:"e5",title:"연봉 협상 결과 통보",ko:"후보자의 기대 연봉이 당사 밴드를 초과합니다. 현재 제안이 최선임을 정중히 유지하면서 기타 보상 요소를 부각하는 이메일을 작성하세요.",en:"Hold firm on salary (candidate exceeds band) while highlighting other compensation elements."},
+  ],
+  meeting:[
+    {id:"m1",title:"Calibration 오프닝",ko:"HR BP들과 연간 Calibration 회의를 시작합니다. 목적, 4단계 평가 기준, 진행 방식을 설명하는 오프닝 발언을 작성하세요.",en:"Open a calibration session. Explain purpose, 4-tier rating scale, and ground rules."},
+    {id:"m2",title:"임금 공정성 면담",ko:"직원이 '동일 직급 동료보다 급여가 낮다'고 면담을 요청했습니다. 공감하면서 임금 검토 프로세스를 설명하는 발언을 작성하세요.",en:"Employee believes they're underpaid vs peers. Acknowledge and explain your pay equity review."},
+    {id:"m3",title:"Exit Interview",ko:"퇴직 예정자와 Exit Interview 중입니다. 퇴직 이유, 조직 개선점, 향후 연락 의향을 자연스럽게 묻는 발언을 작성하세요.",en:"Conduct an exit interview — explore reasons for leaving, suggestions, and staying in touch."},
+  ],
+};
+const BADGES={email:"bdg-email",meeting:"bdg-meeting",article:"bdg-article",other:"bdg-other"};
+const BADGE_LBL={email:"📧 이메일",meeting:"🎤 회의",article:"📰 아티클",other:"💬 기타"};
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let exprs=[], selIds=[], cardData={}, currentWriteMode="email", currentScen=null, savedW=false, savedP=false, currentVcat="전체", currentTmplCat="전체", currentTmplSel=null;
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function getDayIdx(arr){const d=new Date();return(d.getMonth()*31+d.getDate())%arr.length}
+function showToast(msg){const t=document.getElementById('toastEl');t.textContent='✨ '+msg;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2400)}
+function updateCount(){document.getElementById('exprCount').textContent='📚 '+exprs.length+'개'}
+
+/* ══════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════ */
+function startApp(tab){
+  const sp=document.getElementById('splash');
+  sp.classList.add('out');
+  setTimeout(()=>{
+    sp.style.display='none';
+    const app=document.getElementById('app');
+    app.classList.add('show');
+    switchTab(tab||'home');
+  },480);
+}
+function switchTab(id){
+  document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.toggle('on',b.dataset.tab===id)});
+  document.querySelectorAll('[id^="page-"]').forEach(p=>p.style.display='none');
+  const pg=document.getElementById('page-'+id);
+  if(pg){pg.style.display='block';pg.style.animation='none';void pg.offsetWidth;pg.style.animation='up .3s ease both';}
+  const renders={home:renderHome,write:renderWrite,tmpl:renderTmpl,cards:renderCards,bank:renderBank};
+  if(renders[id]) renders[id]();
+}
+
+/* ══════════════════════════════════════
+   HOME TAB
+══════════════════════════════════════ */
+function renderHome(){
+  const wod=DAILY_WORDS[getDayIdx(DAILY_WORDS)];
+  const pod=DAILY_PHRASES[getDayIdx(DAILY_PHRASES)];
+  const vlist=currentVcat==="전체"?HR_VOCAB:HR_VOCAB.filter(v=>v.cat===currentVcat);
+  const catColors={채용:"#BE185D",온보딩:"#047857",성과:"#1D4ED8",주재원:"#6D28D9",보상:"#92400E",복리후생:"#065F46",노사:"#374151"};
+  const catBgs={채용:"#FFE4EB",온보딩:"#D1FAE5",성과:"#DBEAFE",주재원:"#EDE9FE",보상:"#FEF3C7",복리후생:"#ECFDF5",노사:"#F3F4F6"};
+  document.getElementById('page-home').innerHTML=`
+  <div class="pg-hero">
+    <div class="float-row"><span class="fi">💼</span><span class="fi">📖</span><span class="fi">🌍</span></div>
+    <div class="pg-title">오늘의 <span class="pg-accent">HR 영어</span></div>
+    <div class="pg-sub">매일 새로운 단어와 표현이 업데이트돼요. 저장하고 AI 카드로 체화하세요!</div>
+  </div>
+  <div class="grid2" style="margin-bottom:26px">
+    <div class="today-card wod">
+      <div class="today-lbl" style="color:#F43F6E"><span>🌟 오늘의 HR 단어</span>
+        <button class="btn-save${savedW?' saved':''}" onclick="saveWord()">${savedW?'✓ 저장됨':'📌 저장하기'}</button>
+      </div>
+      <div class="today-word">${wod.word}</div>
+      <div class="today-pron">${wod.pron}</div>
+      <span class="cat-badge" style="background:#FFE4EB;color:#BE185D">${wod.cat}</span>
+      <div class="today-def">${wod.def}</div>
+      <div class="today-ex wod">"${wod.ex}"</div>
+    </div>
+    <div class="today-card pod">
+      <div class="today-lbl" style="color:#A78BFA"><span>💬 오늘의 비즈니스 표현</span>
+        <button class="btn-save${savedP?' saved':''}" onclick="savePhrase()">${savedP?'✓ 저장됨':'📌 저장하기'}</button>
+      </div>
+      <div class="today-phrase">"${pod.phrase}"</div>
+      <div class="today-ko">🇰🇷 ${pod.ko}</div>
+      <div class="today-ex pod">"${pod.usage}"</div>
+    </div>
+  </div>
+  <div class="sec-ttl">📚 HR 핵심 어휘 사전</div>
+  <div style="display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap">${VCATS.map(c=>`<button class="cat-btn${currentVcat===c?' on':''}" onclick="setVcat('${c}')">${c}</button>`).join('')}</div>
+  <div class="grid4">${vlist.map(v=>`<div class="vocab-chip"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="vc-word">${v.word}</div><div class="vc-ko">${v.ko}</div></div><span style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;background:${catBgs[v.cat]||'#F3F4F6'};color:${catColors[v.cat]||'#4B5563'}">${v.cat}</span></div></div>`).join('')}</div>`;
+}
+function saveWord(){
+  if(savedW)return;
+  const wod=DAILY_WORDS[getDayIdx(DAILY_WORDS)];
+  exprs.unshift({id:uid(),text:wod.word,ko:wod.def.slice(0,28)+'…',source:'other',ctx:'오늘의 HR 단어'});
+  savedW=true; updateCount(); showToast(wod.word+' 를 저장했어요!'); renderHome();
+}
+function savePhrase(){
+  if(savedP)return;
+  const pod=DAILY_PHRASES[getDayIdx(DAILY_PHRASES)];
+  exprs.unshift({id:uid(),text:pod.phrase,ko:pod.ko,source:'other',ctx:'오늘의 비즈니스 표현'});
+  savedP=true; updateCount(); showToast('"'+pod.phrase+'" 를 저장했어요!'); renderHome();
+}
+function setVcat(c){currentVcat=c;renderHome();}
+
+/* ══════════════════════════════════════
+   WRITING TAB
+══════════════════════════════════════ */
+function renderWrite(){
+  document.getElementById('page-write').innerHTML=`
+  <div class="pg-hero">
+    <div class="float-row"><span class="fi">✍️</span><span class="fi">💪</span><span class="fi">🎯</span></div>
+    <div class="pg-title">작문 <span class="pg-accent">연습</span></div>
+    <div class="pg-sub">실제 HR 시나리오를 영어로 작성하고 AI 코치에게 즉시 피드백을 받으세요!</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:16px">
+    <button class="mode-btn${currentWriteMode==='email'?' on':''}" onclick="setWriteMode('email')">📧 이메일 작성</button>
+    <button class="mode-btn${currentWriteMode==='meeting'?' on':''}" onclick="setWriteMode('meeting')">🎤 회의 발언</button>
+  </div>
+  <button class="btn btn-lav" onclick="pickScen()" style="margin-bottom:18px">🎲 새 시나리오 받기</button>
+  <div id="write-body">${currentScen?renderScenBody():'<div class="empty" style="padding:40px 20px"><span class="empty-ico">✍️</span><div style="font-weight:600;font-size:14px;color:#64748B;margin-bottom:4px">시나리오를 받아보세요!</div><div style="font-size:12px;color:#94A3B8">위 버튼을 클릭하면 HR 영작 시나리오가 제공돼요</div></div>'}</div>`;
+}
+function setWriteMode(m){currentWriteMode=m;currentScen=null;renderWrite();}
+function pickScen(){
+  const pool=SCENARIOS[currentWriteMode];
+  currentScen=pool[Math.floor(Math.random()*pool.length)];
+  document.getElementById('write-body').innerHTML=renderScenBody();
+}
+function renderScenBody(){
+  if(!currentScen)return'';
+  const chips=exprs.slice(0,8).map(e=>`<button class="chip" onclick="insertExpr('${e.text.replace(/'/g,"\\'")}')">${e.text}</button>`).join('');
+  return`<div class="scen" style="animation:popIn .3s ease">
+    <div class="scen-lbl">📍 시나리오 — ${currentScen.title}</div>
+    <div style="font-size:14px;color:#1E1B4B;line-height:1.8;margin-bottom:6px;font-weight:600">${currentScen.ko}</div>
+    <div style="font-size:12px;color:#3730A3;line-height:1.65;font-style:italic;opacity:.85">${currentScen.en}</div>
+  </div>
+  ${exprs.length>0?`<div class="card2" style="margin-bottom:11px"><div style="font-size:12px;color:#F43F6E;font-weight:700;margin-bottom:7px">💡 저장된 표현 — 클릭하면 입력창에 추가돼요!</div><div style="display:flex;flex-wrap:wrap;gap:6px">${chips}</div></div>`:''}
+  <textarea id="writeArea" class="ftxt" style="margin-bottom:12px" placeholder="${currentWriteMode==='email'?'Dear [Name],\n\n여기에 영어 이메일을 작성하세요...\n\nBest regards,\n[Your Name]':'회의 발언을 영어로 작성해보세요...'}"></textarea>
+  <div style="display:flex;gap:8px;margin-bottom:4px">
+    <button class="btn btn-rose" id="fbBtn" onclick="submitWrite()">✨ AI 피드백 받기</button>
+    <button class="btn btn-ghost" onclick="clearWrite()">초기화</button>
+  </div>
+  <div id="fbErr"></div><div id="fbResult"></div>`;
+}
+function insertExpr(txt){const a=document.getElementById('writeArea');if(a)a.value+=(a.value?' ':'')+txt;}
+function clearWrite(){const a=document.getElementById('writeArea');if(a)a.value='';const r=document.getElementById('fbResult');if(r)r.innerHTML='';}
+async function submitWrite(){
+  const a=document.getElementById('writeArea');
+  if(!a||!a.value.trim()||!currentScen)return;
+  const btn=document.getElementById('fbBtn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> AI 분석 중...';
+  document.getElementById('fbErr').innerHTML='';document.getElementById('fbResult').innerHTML='';
+  try{
+    const exprList=exprs.length>0?exprs.map(e=>`- "${e.text}" (${e.ko||''})`).join('\n'):'(저장된 표현 없음)';
+    const sys='You are an encouraging business English coach for Korean HR professionals. Use Korean for all explanations.';
+    const usr=`Scenario: ${currentScen.en}\n\nSaved expressions:\n${exprList}\n\nLearner's writing:\n"""\n${a.value}\n"""\n\nProvide feedback using EXACTLY these Korean headers:\n\n## 🌟 전반적인 평가\n\n## ✅ 잘 쓴 표현\n\n## 💡 저장 표현 활용 제안\n\n## ✏️ 개선 포인트\n\n## 🏆 모범 답안`;
+    const res=await callClaude(sys,usr,1200);
+    document.getElementById('fbResult').innerHTML=`<div class="fb"><div class="fb-ttl">🌿 AI 코치 피드백</div><div class="fb-body">${formatFeedback(res)}</div></div>`;
+  }catch(e){document.getElementById('fbErr').innerHTML=`<div style="color:#991B1B;font-size:13px;margin-top:10px;padding:10px 13px;background:rgba(254,226,226,.7);border-radius:9px">피드백 생성 오류: ${e.message}</div>`;}
+  btn.disabled=false;btn.innerHTML='✨ AI 피드백 받기';
+}
+function formatFeedback(txt){
+  return txt.split('\n').map(line=>{
+    if(line.startsWith('## '))return`<div style="font-weight:700;color:#1E1B4B;font-size:14px;margin-top:14px;margin-bottom:5px">${line.replace('## ','')}</div>`;
+    if(line.trim()==='')return'<div style="height:3px"></div>';
+    return`<div style="padding-left:2px">${line}</div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════
+   TEMPLATES TAB
+══════════════════════════════════════ */
+function renderTmpl(){
+  const list=currentTmplCat==='전체'?HR_TEMPLATES:HR_TEMPLATES.filter(t=>t.category===currentTmplCat);
+  document.getElementById('page-tmpl').innerHTML=`
+  <div class="pg-hero">
+    <div class="float-row"><span class="fi">📋</span><span class="fi">💼</span><span class="fi">✈️</span></div>
+    <div class="pg-title">HR <span class="pg-accent">이메일 템플릿</span></div>
+    <div class="pg-sub">글로벌 인사담당자·주재원 관리에 바로 쓸 수 있는 영문 템플릿 모음.</div>
+  </div>
+  <div style="display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap">${TMPL_CATS.map(c=>`<button class="tag-pill${currentTmplCat===c?' on':' off'}" onclick="setTmplCat('${c}')">${c}</button>`).join('')}</div>
+  <div class="grid3">${list.map(t=>`<div class="tmpl-card" onclick="openTmpl('${t.id}')"><div class="tmpl-ico" style="background:${t.bg}">${t.icon}</div><div class="tmpl-cat" style="color:${t.catColor}">${t.category}</div><div class="tmpl-name">${t.title}</div><div style="margin-top:7px;font-size:11px;color:#94A3B8;font-weight:500">클릭하여 보기 →</div></div>`).join('')}</div>
+  <div id="tmplModal"></div>`;
+}
+function setTmplCat(c){currentTmplCat=c;renderTmpl();}
+function parseBody(txt){return txt.split(/\*\*(.*?)\*\*/g).map((p,i)=>i%2===1?`<span class="kp">${p}</span>`:p).join('');}
+function openTmpl(id){
+  const t=HR_TEMPLATES.find(x=>x.id===id);
+  if(!t)return;
+  currentTmplSel=t;
+  document.getElementById('tmplModal').innerHTML=`
+  <div class="overlay" onclick="closeTmpl()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+        <div style="display:flex;gap:11px;align-items:flex-start">
+          <div class="tmpl-ico" style="background:${t.bg};border-radius:11px;width:44px;height:44px;flex-shrink:0">${t.icon}</div>
+          <div><div style="font-size:11px;font-weight:700;color:${t.catColor};margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em">${t.category}</div><div style="font-size:18px;font-weight:800;color:#1E1B4B">${t.title}</div></div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button class="btn btn-rose btn-sm" id="copyBtn" onclick="copyTmpl()">📋 복사</button>
+          <button class="btn btn-ghost btn-sm" onclick="closeTmpl()">✕</button>
+        </div>
+      </div>
+      <div class="modal-subj">📧 Subject: ${t.subject}</div>
+      <div style="margin-bottom:12px;font-size:11px;color:#94A3B8"><span style="background:rgba(255,228,235,.8);color:#BE185D;padding:2px 8px;border-radius:6px;font-weight:700">분홍 표현</span> = 핵심 HR 비즈니스 표현</div>
+      <div class="tmpl-body">${parseBody(t.body)}</div>
+    </div>
+  </div>`;
+}
+function closeTmpl(){document.getElementById('tmplModal').innerHTML='';}
+function copyTmpl(){
+  if(!currentTmplSel)return;
+  const plain=`Subject: ${currentTmplSel.subject}\n\n${currentTmplSel.body.replace(/\*\*(.*?)\*\*/g,'$1')}`;
+  navigator.clipboard.writeText(plain);
+  const btn=document.getElementById('copyBtn');
+  btn.textContent='✓ 복사됨';setTimeout(()=>btn.textContent='📋 복사',2000);
+}
+
+/* ══════════════════════════════════════
+   AI CARDS TAB
+══════════════════════════════════════ */
+function renderCards(){
+  const targets=selIds.length>0?exprs.filter(e=>selIds.includes(e.id)):exprs.slice(0,8);
+  const pg=document.getElementById('page-cards');
+  if(exprs.length===0){
+    pg.innerHTML=`<div class="pg-hero"><div class="float-row"><span class="fi">🃏</span><span class="fi">🌟</span></div><div class="pg-title">AI <span class="pg-accent">학습 카드</span></div></div><div class="empty"><span class="empty-ico">🃏</span><div style="font-weight:600;color:#64748B">표현 저장소에서 표현을 먼저 저장해주세요!</div></div>`;
+    return;
+  }
+  const col={email:'pk',meeting:'lv',article:'mn',other:'sk'};
+  const ico={email:'📧',meeting:'🎤',article:'📰',other:'💬'};
+  const bds={email:'bdg-email',meeting:'bdg-meeting',article:'bdg-article',other:'bdg-other'};
+  const bls={email:'📧 이메일',meeting:'🎤 회의',article:'📰 아티클',other:'💬 기타'};
+  pg.innerHTML=`
+  <div class="pg-hero">
+    <div class="float-row"><span class="fi">🃏</span><span class="fi">🌟</span><span class="fi">🧠</span></div>
+    <div class="pg-title">AI <span class="pg-accent">학습 카드</span></div>
+    <div class="pg-sub">카드를 클릭하면 뒤집혀요! HR 맥락 예문, 관련 표현, 흔한 실수까지 확인하세요.</div>
+    <button class="btn btn-rose" onclick="genAllCards()">✨ 전체 카드 생성</button>
+  </div>
+  <div id="cardsErr"></div>
+  <div class="grid2" style="gap:18px" id="cardsGrid">
+    ${targets.map(ex=>`
+    <div>
+      <div class="flip-wrap" id="fw-${ex.id}" onclick="flipCard('${ex.id}')">
+        <div class="flip-inner" id="fi-${ex.id}">
+          <div class="flip-f">
+            <div class="i3d ${col[ex.source]||'sk'}" style="width:44px;height:44px;font-size:20px;margin-bottom:11px">${ico[ex.source]||'💬'}</div>
+            <span class="bdg ${bds[ex.source]||'bdg-other'}" style="margin-bottom:8px">${bls[ex.source]||'기타'}</span>
+            <div class="flip-word">"${ex.text}"</div>
+            ${ex.ko?`<div style="color:#64748B;font-size:12px;margin-top:4px">${ex.ko}</div>`:''}
+            <div id="fcta-${ex.id}">
+              <button class="btn btn-ghost btn-sm" style="margin-top:11px" onclick="event.stopPropagation();genCard('${ex.id}')">✨ 카드 생성</button>
+            </div>
+          </div>
+          <div class="flip-b" id="fb-${ex.id}"><div style="color:#94A3B8;font-size:13px;text-align:center;margin-top:40px">카드를 먼저 생성하세요</div></div>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+  // re-render already generated cards
+  targets.forEach(ex=>{if(cardData[ex.id])renderCardBack(ex.id,cardData[ex.id]);});
+}
+function flipCard(id){if(cardData[id]){const fi=document.getElementById('fi-'+id);if(fi)fi.classList.toggle('f');}}
+async function genCard(id){
+  const ex=exprs.find(e=>e.id===id);if(!ex)return;
+  const cta=document.getElementById('fcta-'+id);
+  if(cta)cta.innerHTML='<span class="spinner"></span>';
+  try{
+    const sys=`You are a business English coach for Korean HR professionals. Return ONLY valid JSON — no markdown fences — with this exact structure:\n{"definition":"한국어 정의 1-2문장","register":"Formal / Semi-formal / Neutral","hrExample1":"HR 이메일 예문(영어)","hrExample2":"HR 회의 예문(영어)","relatedPhrases":["p1","p2","p3"],"commonMistake":"한국인 흔한 실수와 교정(한국어)"}`;
+    const raw=await callClaude(sys,`Expression: "${ex.text}"\nMeaning: "${ex.ko||''}"\nContext: "${ex.ctx||''}"\nSource: ${ex.source}`,700);
+    const data=JSON.parse(raw.replace(/```json\n?|\n?```/g,'').trim());
+    cardData[id]=data;
+    renderCardBack(id,data);
+    if(cta)cta.innerHTML='<div style="color:#94A3B8;font-size:11px;margin-top:11px;background:rgba(244,63,110,.06);padding:4px 10px;border-radius:6px">👆 클릭해서 뒤집기</div>';
+  }catch(e){
+    const err=document.getElementById('cardsErr');
+    if(err)err.innerHTML=`<div style="color:#991B1B;font-size:13px;margin-bottom:13px;padding:10px 14px;background:rgba(254,226,226,.7);border-radius:9px">카드 생성 오류: ${e.message}</div>`;
+    if(cta)cta.innerHTML='<button class="btn btn-ghost btn-sm" style="margin-top:11px" onclick="event.stopPropagation();genCard(\''+id+'\')">다시 시도</button>';
+  }
+}
+function renderCardBack(id,d){
+  const fb=document.getElementById('fb-'+id);
+  if(!fb)return;
+  const related=(d.relatedPhrases||[]).map(p=>`<span style="background:rgba(237,233,254,.8);color:#6D28D9;font-size:11px;padding:2px 7px;border-radius:6px;font-weight:600">${p}</span>`).join('');
+  fb.innerHTML=`
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+      <span style="background:rgba(237,233,254,.8);color:#6D28D9;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700">${d.register}</span>
+      <span style="font-size:10px;color:#94A3B8">✦ HR English</span>
+    </div>
+    <div style="font-size:12px;color:#64748B;line-height:1.7;padding:7px 10px;background:rgba(255,228,235,.5);border-radius:8px;margin-bottom:9px">${d.definition}</div>
+    <div style="font-size:11px;color:#BE185D;font-weight:700;margin-bottom:3px">📧 이메일 예문</div>
+    <div style="font-size:12px;color:#1E1B4B;line-height:1.7;font-style:italic;margin-bottom:8px;padding-left:5px">"${d.hrExample1}"</div>
+    <div style="font-size:11px;color:#6D28D9;font-weight:700;margin-bottom:3px">🎤 회의 예문</div>
+    <div style="font-size:12px;color:#1E1B4B;line-height:1.7;font-style:italic;margin-bottom:8px;padding-left:5px">"${d.hrExample2}"</div>
+    <hr class="divider"/>
+    <div style="font-size:12px;color:#991B1B;line-height:1.65;padding:7px 10px;background:rgba(254,226,226,.6);border-radius:7px"><span style="font-weight:700">⚠ 주의: </span>${d.commonMistake}</div>
+    ${related?`<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">${related}</div>`:''}`;
+}
+async function genAllCards(){
+  const targets=selIds.length>0?exprs.filter(e=>selIds.includes(e.id)):exprs.slice(0,8);
+  for(const ex of targets) if(!cardData[ex.id]) await genCard(ex.id);
+}
+
+/* ══════════════════════════════════════
+   EXPRESSION BANK TAB
+══════════════════════════════════════ */
+function renderBank(){
+  const list=exprs.map(ex=>`
+  <div class="expr${selIds.includes(ex.id)?' sel':''}" onclick="toggleSel('${ex.id}')">
+    <div class="i3d ${ex.source==='email'?'pk':ex.source==='meeting'?'lv':ex.source==='article'?'mn':'sk'}" style="width:38px;height:38px;font-size:17px;border-radius:9px">
+      ${ex.source==='email'?'📧':ex.source==='meeting'?'🎤':ex.source==='article'?'📰':'💬'}
+    </div>
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap">
+        <div class="expr-txt">${ex.text}</div>
+        <span class="bdg ${BADGES[ex.source]||'bdg-other'}">${BADGE_LBL[ex.source]||'기타'}</span>
+      </div>
+      ${ex.ko?`<div class="expr-ko">🇰🇷 ${ex.ko}</div>`:''}
+      ${ex.ctx?`<div class="expr-ctx">"${ex.ctx}"</div>`:''}
+    </div>
+    <button style="background:rgba(244,63,110,.1);border:none;color:#F43F6E;cursor:pointer;font-size:12px;padding:5px 7px;border-radius:7px;font-weight:700" onclick="event.stopPropagation();delExpr('${ex.id}')">✕</button>
+  </div>`).join('');
+  document.getElementById('page-bank').innerHTML=`
+  <div class="pg-hero">
+    <div class="float-row"><span class="fi">📚</span><span class="fi">✨</span><span class="fi">💬</span></div>
+    <div class="pg-title">표현 <span class="pg-accent">저장소</span></div>
+    <div class="pg-sub">업무 중 마주친 영어 표현을 저장하세요. 출처·맥락을 기록할수록 AI 카드 품질이 높아져요.</div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:15px">
+      <div class="i3d pk" style="width:42px;height:42px;font-size:19px">➕</div>
+      <div><div style="font-weight:700;font-size:14px">새 표현 추가</div><div style="font-size:12px;color:#64748B">이메일·회의·아티클에서 발견한 표현을 저장하세요</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 145px;gap:11px;margin-bottom:11px">
+      <div class="fl"><label class="flb">영어 표현 *</label><input class="finp" id="bankTxt" placeholder="e.g. This is contingent upon..." onkeydown="if(event.key==='Enter')addExpr()"/></div>
+      <div class="fl"><label class="flb">출처</label><select class="fsel" id="bankSrc"><option value="email">📧 이메일</option><option value="meeting">🎤 회의</option><option value="article">📰 아티클</option><option value="other">💬 기타</option></select></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:15px">
+      <div class="fl"><label class="flb">한국어 의미</label><input class="finp" id="bankKo" placeholder="e.g. ~을 전제로"/></div>
+      <div class="fl"><label class="flb">발견한 맥락</label><input class="finp" id="bankCtx" placeholder="어떤 상황에서 봤나요?"/></div>
+    </div>
+    <button class="btn btn-rose" onclick="addExpr()">✨ 저장하기</button>
+  </div>
+  ${exprs.length===0?`<div class="empty"><span class="empty-ico">🌸</span><div style="font-weight:600;font-size:14px;color:#64748B;margin-bottom:4px">아직 저장된 표현이 없어요</div><div style="font-size:12px;color:#94A3B8">위 양식에서 첫 번째 표현을 추가해보세요!</div></div>`:`
+  ${selIds.length>0?`<div class="sel-bar"><span style="font-size:13px;color:#F43F6E;font-weight:700">🌟 ${selIds.length}개 선택됨</span><button class="btn btn-rose btn-sm" onclick="switchTab('cards')">✦ AI 카드로 만들기</button><button class="btn btn-ghost btn-sm" onclick="clearSel()">선택 해제</button></div>`:''}
+  <div style="display:flex;flex-direction:column;gap:8px">${list}</div>`}`;
+}
+function addExpr(){
+  const txt=document.getElementById('bankTxt')?.value.trim();
+  if(!txt)return;
+  exprs.unshift({id:uid(),text:txt,ko:document.getElementById('bankKo')?.value||'',source:document.getElementById('bankSrc')?.value||'other',ctx:document.getElementById('bankCtx')?.value||''});
+  updateCount();showToast('표현이 저장되었습니다');renderBank();
+}
+function delExpr(id){exprs=exprs.filter(e=>e.id!==id);selIds=selIds.filter(s=>s!==id);updateCount();renderBank();}
+function toggleSel(id){selIds=selIds.includes(id)?selIds.filter(s=>s!==id):[...selIds,id];renderBank();}
+function clearSel(){selIds=[];renderBank();}
+
+/* ══════════════════════════════════════
+   CLAUDE API
+══════════════════════════════════════ */
+async function callClaude(sys,usr,max){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:max||1000,system:sys,messages:[{role:'user',content:usr}]}),
+  });
+  const d=await r.json();
+  if(d.error)throw new Error(d.error.message);
+  return d.content?.[0]?.text||'';
+}
+
+/* ══════════════════════════════════════
+   HEARTS
+══════════════════════════════════════ */
+(function(){
+  const E=['❤️','🩷','💕','💝','💗','💞','🌸','💖'];
+  const L=document.getElementById('hl');
+  for(let i=0;i<20;i++){
+    const s=document.createElement('span');
+    const sz=12+Math.random()*18,dur=5+Math.random()*7,del=Math.random()*8;
+    s.className='h';s.textContent=E[i%E.length];
+    s.style.cssText=`left:${Math.random()*100}%;font-size:${sz}px;animation-duration:${dur}s;animation-delay:${del}s;--dx:${(Math.random()-.5)*90}px`;
+    L.appendChild(s);
+  }
+})();
+</script>
+</body>
+</html>
