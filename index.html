@@ -207,6 +207,43 @@ html,body{min-height:100vh;font-family:'Noto Sans KR',sans-serif;overflow-x:hidd
 .chip{background:rgba(255,255,255,.8);color:#F43F6E;font-size:12px;font-weight:600;padding:4px 10px;border-radius:7px;cursor:pointer;border:1.5px solid #FCA5BC;transition:all .14s;font-family:'Noto Sans KR',sans-serif}
 .chip:hover{background:#F43F6E;color:#fff}
 
+/* ── NEWS TAB ── */
+.news-mode-row{display:flex;gap:8px;margin-bottom:20px}
+.news-mode-btn{padding:9px 18px;border-radius:10px;border:1.5px solid rgba(200,160,200,.35);background:rgba(255,255,255,.7);color:#64748B;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:6px}
+.news-mode-btn.on{background:linear-gradient(135deg,#F43F6E,#A78BFA);color:#fff;border-color:transparent}
+.news-mode-btn:not(.on):hover{border-color:#F43F6E;color:#F43F6E}
+.url-input-wrap{display:flex;gap:8px;margin-bottom:16px;align-items:flex-start}
+.url-input{flex:1;background:rgba(255,255,255,.85);border:1.5px solid rgba(200,160,200,.4);border-radius:10px;padding:11px 14px;font-family:'Noto Sans KR',sans-serif;font-size:13px;color:#1E1B4B;outline:none;transition:border-color .18s}
+.url-input:focus{border-color:#F43F6E;box-shadow:0 0 0 3px rgba(244,63,110,.09)}
+.url-input::placeholder{color:#94A3B8}
+.url-examples{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.url-ex-chip{font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;background:rgba(255,228,235,.6);color:#F43F6E;border:1px solid #FCA5BC;cursor:pointer;transition:all .14s;font-family:'Noto Sans KR',sans-serif}
+.url-ex-chip:hover{background:#F43F6E;color:#fff}
+.news-topic-btn.on{background:linear-gradient(135deg,#F43F6E,#E11D48);color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(244,63,110,.25)}
+.news-topic-btn:not(.on):hover{border-color:#F43F6E;color:#F43F6E}
+.news-article-box{background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border:1.5px solid rgba(255,200,210,.3);border-radius:18px;padding:26px 28px;margin-bottom:20px;animation:popIn .35s ease}
+.news-src{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#94A3B8;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.news-headline{font-size:20px;font-weight:900;color:#1E1B4B;line-height:1.3;margin-bottom:14px}
+.news-en-block{background:rgba(255,248,252,.8);border:1.5px solid rgba(255,200,210,.4);border-radius:12px;padding:18px 20px;margin-bottom:14px;font-size:14px;color:#1E1B4B;line-height:2;border-left:4px solid #F43F6E}
+.news-ko-block{background:rgba(237,233,254,.35);border:1.5px solid rgba(196,181,253,.35);border-radius:12px;padding:18px 20px;margin-bottom:20px;font-size:14px;color:#374151;line-height:1.9;border-left:4px solid #A78BFA}
+.news-ko-label{font-size:11px;font-weight:700;color:#A78BFA;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.expr-row{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.expr-item{background:rgba(255,255,255,.8);border:1.5px solid rgba(255,200,210,.3);border-radius:12px;padding:14px 16px}
+.expr-item-phrase{font-size:15px;font-weight:800;color:#F43F6E;margin-bottom:4px}
+.expr-item-ko{font-size:13px;color:#64748B;margin-bottom:6px}
+.expr-item-ex{font-size:12px;color:#374151;line-height:1.7;font-style:italic;padding:8px 12px;background:rgba(255,240,248,.6);border-radius:8px}
+.quiz-box{background:rgba(255,255,255,.88);border:1.5px solid rgba(255,200,210,.3);border-radius:18px;padding:24px 26px;margin-bottom:20px}
+.quiz-q{margin-bottom:18px;padding:14px 16px;background:rgba(255,248,252,.7);border-radius:12px;border:1.5px solid rgba(255,200,210,.25)}
+.quiz-q-txt{font-size:14px;color:#1E1B4B;font-weight:600;line-height:1.7;margin-bottom:10px}
+.quiz-input{width:100%;background:rgba(255,255,255,.9);border:1.5px solid rgba(200,160,200,.4);border-radius:9px;padding:9px 13px;font-family:'Noto Sans KR',sans-serif;font-size:13px;color:#1E1B4B;outline:none;transition:border-color .18s}
+.quiz-input:focus{border-color:#F43F6E;box-shadow:0 0 0 3px rgba(244,63,110,.09)}
+.quiz-input.correct{border-color:#34D399;background:rgba(209,250,229,.4)}
+.quiz-input.wrong{border-color:#F87171;background:rgba(254,226,226,.4)}
+.quiz-hint{font-size:12px;margin-top:6px;font-weight:600}
+.quiz-hint.c{color:#047857}.quiz-hint.w{color:#DC2626}
+.news-skeleton{background:rgba(255,255,255,.6);border-radius:12px;animation:shimmer 1.5s infinite linear;background:linear-gradient(90deg,rgba(255,228,235,.4) 25%,rgba(255,200,220,.7) 50%,rgba(255,228,235,.4) 75%);background-size:200% 100%}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
 @media(max-width:700px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.sp-grid{grid-template-columns:repeat(2,1fr)}.page{padding:16px}.sp-title{font-size:36px}}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#FCA5BC;border-radius:3px}
 </style>
@@ -270,6 +307,7 @@ html,body{min-height:100vh;font-family:'Noto Sans KR',sans-serif;overflow-x:hidd
     <button class="tab-btn"    data-tab="tmpl"  onclick="switchTab('tmpl')"><span class="tab-ico">📋</span>HR 템플릿</button>
     <button class="tab-btn"    data-tab="cards" onclick="switchTab('cards')"><span class="tab-ico">🃏</span>AI 카드화</button>
     <button class="tab-btn"    data-tab="bank"  onclick="switchTab('bank')"><span class="tab-ico">📚</span>표현 저장소</button>
+    <button class="tab-btn"    data-tab="news"  onclick="switchTab('news')"><span class="tab-ico">📰</span>HR 뉴스 읽기</button>
   </nav>
 
   <!-- tab pages -->
@@ -278,9 +316,17 @@ html,body{min-height:100vh;font-family:'Noto Sans KR',sans-serif;overflow-x:hidd
   <div id="page-tmpl"  class="page" style="display:none"></div>
   <div id="page-cards" class="page" style="display:none"></div>
   <div id="page-bank"  class="page" style="display:none"></div>
+  <div id="page-news"  class="page" style="display:none"></div>
+  <div style="text-align:center;padding:16px 0 28px;font-size:11px;color:rgba(100,116,139,.5);font-family:'Noto Sans KR',sans-serif;letter-spacing:.04em">
+    © 2025 Hyunsoo · HR English Coach · All rights reserved.
+  </div>
 </div>
 
 <div id="toastEl" class="toast" style="display:none"></div>
+
+<footer style="position:relative;z-index:2;text-align:center;padding:20px 24px;font-family:'Noto Sans KR',sans-serif;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.04em">
+  © 2025 Hyunsoo · HR English Coach · All rights reserved.
+</footer>
 
 <script>
 /* ══════════════════════════════════════
@@ -388,7 +434,7 @@ function switchTab(id){
   document.querySelectorAll('[id^="page-"]').forEach(p=>p.style.display='none');
   const pg=document.getElementById('page-'+id);
   if(pg){pg.style.display='block';pg.style.animation='none';void pg.offsetWidth;pg.style.animation='up .3s ease both';}
-  const renders={home:renderHome,write:renderWrite,tmpl:renderTmpl,cards:renderCards,bank:renderBank};
+  const renders={home:renderHome,write:renderWrite,tmpl:renderTmpl,cards:renderCards,bank:renderBank,news:renderNews};
   if(renders[id]) renders[id]();
 }
 
@@ -662,16 +708,44 @@ function renderBank(){
     </div>
     <button style="background:rgba(244,63,110,.1);border:none;color:#F43F6E;cursor:pointer;font-size:12px;padding:5px 7px;border-radius:7px;font-weight:700" onclick="event.stopPropagation();delExpr('${ex.id}')">✕</button>
   </div>`).join('');
+
   document.getElementById('page-bank').innerHTML=`
   <div class="pg-hero">
     <div class="float-row"><span class="fi">📚</span><span class="fi">✨</span><span class="fi">💬</span></div>
     <div class="pg-title">표현 <span class="pg-accent">저장소</span></div>
-    <div class="pg-sub">업무 중 마주친 영어 표현을 저장하세요. 출처·맥락을 기록할수록 AI 카드 품질이 높아져요.</div>
+    <div class="pg-sub">업무 중 마주친 영어 표현을 저장하세요. 링글·HBR·LinkedIn 등 URL에서 표현을 한 번에 가져올 수도 있어요!</div>
   </div>
+
+  <!-- URL IMPORT -->
+  <div class="card" style="margin-bottom:16px;border-color:rgba(167,139,250,.35)">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:13px">
+      <div class="i3d lv" style="width:42px;height:42px;font-size:19px">🔗</div>
+      <div>
+        <div style="font-weight:700;font-size:14px">URL에서 표현 가져오기 <span style="font-size:11px;background:rgba(167,139,250,.2);color:#7C3AED;padding:2px 7px;border-radius:6px;font-weight:700;margin-left:4px">NEW</span></div>
+        <div style="font-size:12px;color:#64748B">링글, HBR, LinkedIn 등 URL을 붙여넣으면 AI가 핵심 표현을 자동 추출해요</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <input class="finp" id="urlInput" placeholder="https://www.ringleplus.com/ko/..." style="flex:1"/>
+      <button class="btn btn-lav" id="urlImportBtn" onclick="importFromUrl()" style="flex-shrink:0;white-space:nowrap">✨ 표현 추출</button>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <span style="font-size:11px;color:#94A3B8;font-weight:500;align-self:center">추천 사이트:</span>
+      ${[
+        {label:'Ringle 블로그', url:'https://www.ringleplus.com/ko/student/landing/blog'},
+        {label:'SHRM', url:'https://www.shrm.org/topics-tools/topics'},
+        {label:'HBR', url:'https://hbr.org/topic/subject/human-resource-management'},
+        {label:'LinkedIn Pulse', url:'https://www.linkedin.com/pulse/topics/human-resources-s2/'},
+      ].map(s=>`<button onclick="setUrlInput('${s.url}')" style="font-size:11px;background:rgba(167,139,250,.12);color:#7C3AED;border:1px solid rgba(167,139,250,.3);border-radius:6px;padding:3px 8px;cursor:pointer;font-family:'Noto Sans KR',sans-serif">${s.label}</button>`).join('')}
+    </div>
+    <div id="urlImportResult" style="margin-top:12px"></div>
+  </div>
+
+  <!-- MANUAL ADD -->
   <div class="card" style="margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:15px">
       <div class="i3d pk" style="width:42px;height:42px;font-size:19px">➕</div>
-      <div><div style="font-weight:700;font-size:14px">새 표현 추가</div><div style="font-size:12px;color:#64748B">이메일·회의·아티클에서 발견한 표현을 저장하세요</div></div>
+      <div><div style="font-weight:700;font-size:14px">직접 추가</div><div style="font-size:12px;color:#64748B">이메일·회의·아티클에서 발견한 표현을 직접 저장하세요</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 145px;gap:11px;margin-bottom:11px">
       <div class="fl"><label class="flb">영어 표현 *</label><input class="finp" id="bankTxt" placeholder="e.g. This is contingent upon..." onkeydown="if(event.key==='Enter')addExpr()"/></div>
@@ -683,9 +757,116 @@ function renderBank(){
     </div>
     <button class="btn btn-rose" onclick="addExpr()">✨ 저장하기</button>
   </div>
-  ${exprs.length===0?`<div class="empty"><span class="empty-ico">🌸</span><div style="font-weight:600;font-size:14px;color:#64748B;margin-bottom:4px">아직 저장된 표현이 없어요</div><div style="font-size:12px;color:#94A3B8">위 양식에서 첫 번째 표현을 추가해보세요!</div></div>`:`
+
+  ${exprs.length===0?`<div class="empty"><span class="empty-ico">🌸</span><div style="font-weight:600;font-size:14px;color:#64748B;margin-bottom:4px">아직 저장된 표현이 없어요</div><div style="font-size:12px;color:#94A3B8">URL에서 가져오거나 직접 추가해보세요!</div></div>`:`
   ${selIds.length>0?`<div class="sel-bar"><span style="font-size:13px;color:#F43F6E;font-weight:700">🌟 ${selIds.length}개 선택됨</span><button class="btn btn-rose btn-sm" onclick="switchTab('cards')">✦ AI 카드로 만들기</button><button class="btn btn-ghost btn-sm" onclick="clearSel()">선택 해제</button></div>`:''}
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <div style="font-size:14px;font-weight:700;color:#1E1B4B">저장된 표현 <span style="color:#F43F6E">${exprs.length}개</span></div>
+  </div>
   <div style="display:flex;flex-direction:column;gap:8px">${list}</div>`}`;
+}
+
+/* URL 표현 추출 */
+function setUrlInput(url){
+  const el=document.getElementById('urlInput');
+  if(el){el.value=url;el.focus();}
+}
+async function importFromUrl(){
+  const urlEl=document.getElementById('urlInput');
+  const resultEl=document.getElementById('urlImportResult');
+  const btn=document.getElementById('urlImportBtn');
+  const url=(urlEl?.value||'').trim();
+  if(!url||!url.startsWith('http')){
+    if(resultEl)resultEl.innerHTML=`<div style="color:#991B1B;font-size:13px;padding:9px 12px;background:rgba(254,226,226,.7);border-radius:9px">올바른 URL을 입력해주세요 (https://...)</div>`;
+    return;
+  }
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> 분석 중...';}
+  if(resultEl)resultEl.innerHTML=`<div style="font-size:13px;color:#64748B;padding:9px 12px;background:rgba(237,233,254,.4);border-radius:9px">🔍 페이지를 읽고 표현을 추출하는 중...</div>`;
+
+  try{
+    const sys=`You are a business English expression curator for Korean HR professionals.
+You will be given a URL. Use the web_search tool to fetch and read the page content at that URL.
+Then extract 5-8 useful business English expressions or phrases from the page.
+Return ONLY valid JSON — no markdown fences — in this exact structure:
+{
+  "page_title": "page title or topic in Korean",
+  "source_domain": "domain name only",
+  "expressions": [
+    {"phrase":"exact English expression","ko":"Korean meaning","ctx":"brief context of use (Korean, 1 sentence)","example":"a new example sentence using this phrase"},
+    ...
+  ]
+}
+Focus on expressions useful for HR professionals: email phrases, meeting expressions, business idioms, professional vocabulary.
+Exclude very basic words. Prefer phrases and collocations over single words.`;
+
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:2000,
+        system:sys,
+        tools:[{"type":"web_search_20250305","name":"web_search"}],
+        messages:[{role:'user',content:`Please fetch and analyze this URL, then extract business English expressions from it: ${url}`}],
+      }),
+    });
+    const d=await r.json();
+    if(d.error)throw new Error(d.error.message);
+
+    let raw='';
+    for(const block of(d.content||[])){if(block.type==='text')raw+=block.text;}
+    if(!raw)throw new Error('응답을 받지 못했습니다.');
+
+    const s=raw.indexOf('{'), e=raw.lastIndexOf('}');
+    if(s===-1||e===-1)throw new Error('표현 추출에 실패했습니다. 다른 URL을 시도해보세요.');
+    const data=JSON.parse(raw.slice(s,e+1));
+    const extracted=data.expressions||[];
+    if(!extracted.length)throw new Error('이 페이지에서 추출할 표현을 찾지 못했습니다.');
+
+    // preview + bulk save UI
+    if(resultEl){
+      resultEl.innerHTML=`
+      <div style="background:rgba(209,250,229,.4);border:1.5px solid #6EE7B7;border-radius:12px;padding:14px 16px;margin-top:4px">
+        <div style="font-size:12px;font-weight:700;color:#047857;margin-bottom:10px">
+          ✅ <strong>${data.page_title||data.source_domain||'페이지'}</strong>에서 ${extracted.length}개 표현을 찾았어요!
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+          ${extracted.map((ex,i)=>`
+          <div style="background:rgba(255,255,255,.8);border:1px solid rgba(209,250,229,.7);border-radius:9px;padding:10px 13px;display:flex;align-items:flex-start;gap:10px">
+            <input type="checkbox" id="imp${i}" checked style="margin-top:3px;accent-color:#F43F6E;width:15px;height:15px;cursor:pointer;flex-shrink:0"/>
+            <div style="flex:1">
+              <div style="font-weight:700;font-size:13px;color:#F43F6E">${ex.phrase}</div>
+              <div style="font-size:12px;color:#64748B;margin-top:2px">🇰🇷 ${ex.ko}</div>
+              ${ex.ctx?`<div style="font-size:11px;color:#94A3B8;margin-top:2px;font-style:italic">${ex.ctx}</div>`:''}
+            </div>
+          </div>`).join('')}
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-rose btn-sm" onclick="bulkSaveExprs(${JSON.stringify(extracted).replace(/"/g,'&quot;')})">📌 선택 표현 모두 저장</button>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('urlImportResult').innerHTML='';document.getElementById('urlInput').value=''">닫기</button>
+        </div>
+      </div>`;
+    }
+  }catch(e){
+    if(resultEl)resultEl.innerHTML=`<div style="color:#991B1B;font-size:13px;padding:10px 13px;background:rgba(254,226,226,.7);border-radius:9px"><strong>추출 실패:</strong> ${e.message}</div>`;
+  }
+  if(btn){btn.disabled=false;btn.innerHTML='✨ 표현 추출';}
+}
+
+function bulkSaveExprs(extracted){
+  const checked=extracted.filter((_,i)=>{
+    const cb=document.getElementById('imp'+i);
+    return cb&&cb.checked;
+  });
+  if(!checked.length){showToast('저장할 표현을 선택해주세요');return;}
+  const domain=document.getElementById('urlInput')?.value||'';
+  const src=domain.includes('ringle')||domain.includes('article')||domain.includes('blog')?'article':'other';
+  checked.forEach(ex=>{
+    exprs.unshift({id:uid(),text:ex.phrase,ko:ex.ko,source:src,ctx:ex.ctx||'URL 가져오기',addedAt:new Date().toISOString()});
+  });
+  updateCount();
+  showToast(checked.length+'개 표현을 저장했어요! 🎉');
+  renderBank();
 }
 function addExpr(){
   const txt=document.getElementById('bankTxt')?.value.trim();
@@ -696,6 +877,240 @@ function addExpr(){
 function delExpr(id){exprs=exprs.filter(e=>e.id!==id);selIds=selIds.filter(s=>s!==id);updateCount();renderBank();}
 function toggleSel(id){selIds=selIds.includes(id)?selIds.filter(s=>s!==id):[...selIds,id];renderBank();}
 function clearSel(){selIds=[];renderBank();}
+
+/* ══════════════════════════════════════
+   NEWS TAB — URL 분석 전용
+══════════════════════════════════════ */
+let currentNewsData=null;
+let newsQuizChecked=false;
+
+const NEWS_URL_EXAMPLES=[
+  {label:'Ringle 블로그',    url:'https://www.ringleplus.com/ko/student/landing/blog/ringle-english-expression-contact'},
+  {label:'SHRM',             url:'https://www.shrm.org/topics-tools/news/'},
+  {label:'HBR · HR',        url:'https://hbr.org/topic/subject/human-resource-management'},
+  {label:'People Mgmt',      url:'https://www.peoplemanagement.co.uk/'},
+  {label:'LinkedIn HR',      url:'https://www.linkedin.com/pulse/topics/human-resources-s5/'},
+];
+
+function renderNews(){
+  document.getElementById('page-news').innerHTML=`
+  <div class="pg-hero">
+    <div class="float-row"><span class="fi">📰</span><span class="fi">🌍</span><span class="fi">🔍</span></div>
+    <div class="pg-title">아티클 <span class="pg-accent">읽고 학습</span></div>
+    <div class="pg-sub">읽고 싶은 HR 아티클 URL을 붙여넣으세요.<br/>한국어 번역 · 핵심 표현 해설 · 어휘 퀴즈를 자동으로 생성해드립니다.</div>
+  </div>
+
+  <div class="card" style="margin-bottom:22px">
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input class="finp" id="newsUrlInput" placeholder="https://www.shrm.org/..." style="flex:1"/>
+      <button class="btn btn-rose" id="newsAnalyzeBtn" onclick="analyzeUrl()" style="white-space:nowrap;flex-shrink:0">✨ 분석하기</button>
+    </div>
+    <div style="font-size:11px;color:#94A3B8;font-weight:600;margin-bottom:7px">추천 사이트</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      ${NEWS_URL_EXAMPLES.map(e=>`<button onclick="setNewsUrl('${e.url}')" style="font-size:12px;background:rgba(244,63,110,.08);color:#F43F6E;border:1.5px solid rgba(244,63,110,.2);border-radius:8px;padding:5px 12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-weight:600;transition:all .15s" onmouseover="this.style.background='rgba(244,63,110,.18)'" onmouseout="this.style.background='rgba(244,63,110,.08)'">${e.label}</button>`).join('')}
+    </div>
+  </div>
+
+  <div id="newsContent">${currentNewsData ? renderNewsContent() : `
+    <div class="empty" style="padding:48px 20px">
+      <span class="empty-ico">📰</span>
+      <div style="font-weight:600;font-size:14px;color:#64748B;margin-bottom:6px">URL을 입력하고 분석 버튼을 눌러보세요</div>
+      <div style="font-size:12px;color:#94A3B8;line-height:1.7">링글 블로그, SHRM, HBR 등<br/>어떤 영어 HR 아티클이든 분석할 수 있어요</div>
+    </div>`}
+  </div>`;
+}
+
+function setNewsUrl(url){
+  const inp=document.getElementById('newsUrlInput');
+  if(inp){ inp.value=url; inp.focus(); }
+}
+
+async function analyzeUrl(){
+  const inp=document.getElementById('newsUrlInput');
+  const url=(inp?.value||'').trim();
+  if(!url||!url.startsWith('http')){
+    showToast('올바른 URL을 입력해주세요 (https://...)'); return;
+  }
+  const btn=document.getElementById('newsAnalyzeBtn');
+  const content=document.getElementById('newsContent');
+  if(!btn||!content) return;
+
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> 분석 중...';
+  content.innerHTML=`<div style="display:flex;flex-direction:column;gap:12px">
+    ${[90,50,160,50,130].map(h=>`<div style="height:${h}px;border-radius:12px;background:linear-gradient(90deg,rgba(255,228,235,.5) 25%,rgba(255,200,220,.8) 50%,rgba(255,228,235,.5) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite linear"></div>`).join('')}
+  </div>`;
+
+  try{
+    const sys=`You are a business English coach for Korean HR professionals.
+The user provides a URL. Use the web_search tool to visit and read the page content at that URL.
+Then return ONLY a valid JSON object — no markdown fences, no explanation — with this structure:
+{
+  "source": "website or publication name",
+  "headline": "article or page title",
+  "url": "${url}",
+  "summary_en": "150-200 word English summary of the main content, professional tone",
+  "summary_ko": "한국어 번역. 자연스럽고 읽기 쉽게. 200-250자 내외.",
+  "expressions": [
+    {"phrase":"useful English expression from the content","ko":"한국어 의미","explanation":"HR 담당자에게 유용한 이유 (한국어, 1-2문장)","example":"새로운 예문 (영어)"},
+    {"phrase":"...","ko":"...","explanation":"...","example":"..."},
+    {"phrase":"...","ko":"...","explanation":"...","example":"..."},
+    {"phrase":"...","ko":"...","explanation":"...","example":"..."},
+    {"phrase":"...","ko":"...","explanation":"...","example":"..."}
+  ],
+  "quiz": [
+    {"sentence":"Complete sentence with _____ as blank","answer":"exact missing phrase","hint":"한국어 힌트"},
+    {"sentence":"...","answer":"...","hint":"..."},
+    {"sentence":"...","answer":"...","hint":"..."},
+    {"sentence":"...","answer":"...","hint":"..."}
+  ]
+}`;
+
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:2500,
+        system:sys,
+        tools:[{"type":"web_search_20250305","name":"web_search"}],
+        messages:[{role:'user',content:`Fetch and analyze this URL, then return JSON only: ${url}`}],
+      }),
+    });
+    const d=await r.json();
+    if(d.error) throw new Error(d.error.message);
+
+    let raw='';
+    for(const block of(d.content||[])){ if(block.type==='text') raw+=block.text; }
+    if(!raw) throw new Error('응답에서 텍스트를 찾을 수 없습니다.');
+
+    const s=raw.indexOf('{'), e=raw.lastIndexOf('}');
+    if(s===-1||e===-1) throw new Error('분석 결과를 파싱하지 못했습니다. 다른 URL을 시도해보세요.');
+    currentNewsData=JSON.parse(raw.slice(s,e+1));
+    newsQuizChecked=false;
+    content.innerHTML=renderNewsContent();
+
+  }catch(err){
+    content.innerHTML=`<div style="color:#991B1B;padding:16px 18px;background:rgba(254,226,226,.7);border-radius:12px;font-size:14px;line-height:1.7">
+      <strong>분석 실패:</strong> ${err.message}<br/>
+      <span style="font-size:12px;color:#64748B;display:block;margin-top:6px">• URL이 공개 페이지인지 확인해주세요<br/>• 로그인이 필요한 페이지는 분석이 어려울 수 있어요</span>
+    </div>`;
+  }
+  if(btn){ btn.disabled=false; btn.innerHTML='✨ 분석하기'; }
+}
+
+function renderNewsContent(){
+  if(!currentNewsData) return '';
+  const d=currentNewsData;
+  const exList=d.expressions||[];
+  const qList=d.quiz||[];
+
+  const exprHTML=exList.map((e,i)=>`
+    <div class="expr-item" style="animation:slideR .22s ${i*.06}s ease both">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px">
+        <div class="expr-item-phrase">${e.phrase}</div>
+        <button onclick="saveNewsExpr(${i})" id="saveExprBtn${i}" class="btn-save" style="flex-shrink:0">📌 저장</button>
+      </div>
+      <div class="expr-item-ko">🇰🇷 ${e.ko}</div>
+      <div style="font-size:12px;color:#374151;margin-bottom:7px;line-height:1.65">${e.explanation}</div>
+      <div class="expr-item-ex">"${e.example}"</div>
+    </div>`).join('');
+
+  const quizHTML=qList.map((q,i)=>`
+    <div class="quiz-q" id="qq${i}">
+      <div class="quiz-q-txt">Q${i+1}. ${q.sentence.replace('_____','<span style="background:#FFE4EB;color:#F43F6E;padding:1px 8px;border-radius:5px;font-weight:700">_____</span>')}</div>
+      <div style="font-size:11px;color:#94A3B8;margin-bottom:7px">힌트: ${q.hint}</div>
+      <input class="quiz-input" id="qi${i}" placeholder="답을 입력하세요..." oninput="newsQuizInput(${i})"/>
+      <div class="quiz-hint" id="qh${i}" style="display:none"></div>
+    </div>`).join('');
+
+  return`
+  <div class="news-article-box">
+    <div class="news-src">
+      📰 ${d.source||'Article'}
+      <a href="${d.url||'#'}" target="_blank" rel="noopener" style="color:#A78BFA;text-decoration:none;font-size:11px;margin-left:6px;font-weight:600">원문 보기 →</a>
+    </div>
+    <div class="news-headline">${d.headline||'HR Article'}</div>
+
+    <div style="font-size:11px;font-weight:700;color:#F43F6E;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">🇺🇸 English Summary</div>
+    <div class="news-en-block">${(d.summary_en||'').replace(/\n/g,'<br/>')}</div>
+
+    <div class="news-ko-label">🇰🇷 한국어 번역</div>
+    <div class="news-ko-block">${(d.summary_ko||'').replace(/\n/g,'<br/>')}</div>
+  </div>
+
+  <div class="sec-ttl" style="margin-bottom:12px">✨ 핵심 표현 ${exList.length}개</div>
+  <div class="expr-row">${exprHTML}</div>
+
+  <div class="sec-ttl" style="margin-bottom:4px">📝 어휘 퀴즈</div>
+  <div style="font-size:12px;color:#94A3B8;margin-bottom:14px">위 표현들로 빈칸을 채워보세요!</div>
+  <div class="quiz-box">
+    ${quizHTML}
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-rose" onclick="checkNewsQuiz()">✅ 정답 확인</button>
+      <button class="btn btn-ghost" onclick="resetNewsQuiz()">🔄 초기화</button>
+    </div>
+    <div id="quizScore" style="margin-top:12px"></div>
+  </div>
+  <div style="margin-top:14px">
+    <button class="btn btn-ghost" onclick="currentNewsData=null;renderNews()" style="font-size:12px">← 다른 아티클 분석하기</button>
+  </div>`;
+}
+
+function saveNewsExpr(idx){
+  const e=currentNewsData?.expressions?.[idx];
+  if(!e) return;
+  exprs.unshift({id:uid(),text:e.phrase,ko:e.ko,source:'article',ctx:'HR 아티클',addedAt:new Date().toISOString()});
+  updateCount();
+  showToast('"'+e.phrase+'" 저장했어요!');
+  const btn=document.getElementById('saveExprBtn'+idx);
+  if(btn){ btn.textContent='✓ 저장됨'; btn.className='btn-save saved'; btn.disabled=true; }
+}
+
+function newsQuizInput(i){
+  if(newsQuizChecked) return;
+  const inp=document.getElementById('qi'+i);
+  if(inp) inp.classList.remove('correct','wrong');
+  const h=document.getElementById('qh'+i);
+  if(h) h.style.display='none';
+}
+
+function checkNewsQuiz(){
+  const qList=currentNewsData?.quiz||[];
+  let correct=0;
+  qList.forEach((q,i)=>{
+    const inp=document.getElementById('qi'+i);
+    const hint=document.getElementById('qh'+i);
+    if(!inp||!hint) return;
+    const user=inp.value.trim().toLowerCase();
+    const ans=q.answer.trim().toLowerCase();
+    const ok=user===ans||(ans.includes(user)&&user.length>3);
+    inp.classList.toggle('correct',ok);
+    inp.classList.toggle('wrong',!ok);
+    hint.style.display='block';
+    hint.className='quiz-hint '+(ok?'c':'w');
+    hint.textContent=ok?'✓ 정답!':'✗ 정답: '+q.answer;
+    if(ok) correct++;
+  });
+  newsQuizChecked=true;
+  const score=document.getElementById('quizScore');
+  const pct=qList.length?Math.round(correct/qList.length*100):0;
+  if(score) score.innerHTML=`<div style="padding:13px 16px;border-radius:11px;background:${pct===100?'rgba(209,250,229,.6)':pct>=50?'rgba(255,228,235,.5)':'rgba(254,226,226,.5)'};border:1.5px solid ${pct===100?'#6EE7B7':'#FCA5BC'};font-size:14px;font-weight:700;color:${pct===100?'#047857':'#F43F6E'}">
+    ${pct===100?'🎉 완벽합니다!':pct>=75?'👏 훌륭해요!':pct>=50?'💪 조금만 더!':'📖 다시 읽어봐요!'} &nbsp; ${correct}/${qList.length} 정답 (${pct}%)
+  </div>`;
+}
+
+function resetNewsQuiz(){
+  newsQuizChecked=false;
+  (currentNewsData?.quiz||[]).forEach((_,i)=>{
+    const inp=document.getElementById('qi'+i);
+    const h=document.getElementById('qh'+i);
+    if(inp){ inp.value=''; inp.classList.remove('correct','wrong'); }
+    if(h) h.style.display='none';
+  });
+  const s=document.getElementById('quizScore');
+  if(s) s.innerHTML='';
+}
 
 /* ══════════════════════════════════════
    CLAUDE API
